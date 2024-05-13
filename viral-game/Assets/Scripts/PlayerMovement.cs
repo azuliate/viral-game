@@ -58,21 +58,13 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = 0f;
         }
 
-        //Getting w,a,s,d inputs
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
-
         StateHandler();
-
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(PlayerInput() * speed * Time.deltaTime);
 
         if(Input.GetKeyDown(jumpKey) && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
-
         if(Input.GetKeyDown(crouchKey))
         {
             //Make character small
@@ -91,6 +83,17 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private Vector3 PlayerInput()
+    {
+        //Getting w,a,s,d inputs
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        //Calculate how much to move the player
+        Vector3 move = transform.right * x + transform.forward * z;
+        return move;
     }
 
     private void StateHandler()
